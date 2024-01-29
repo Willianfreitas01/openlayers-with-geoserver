@@ -3,7 +3,10 @@ import Map from 'ol/Map.js';
 import OSM from 'ol/source/OSM.js';
 import TileLayer from 'ol/layer/Tile.js';
 import TileWMS from 'ol/source/TileWMS.js';
-import View from 'ol/View.js';
+import View from 'ol/View.js';import "ol/ol.css"
+import "ol-ext/dist/ol-ext.css"
+
+import LayerSwitcher from "ol-ext/control/LayerSwitcher"
 
 function addWMSTileLayer(url, layers) {
   return new TileLayer({
@@ -28,7 +31,12 @@ const map = new Map({
     addWMSTileLayer('http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_bairro'),
   ],
   view: new View({
-    center: [0, 0],
+    center: [0,0],
     zoom: 2,
   }),
 });
+
+
+const layerswitcher = new LayerSwitcher()
+
+map.addControl(layerswitcher)
