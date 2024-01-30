@@ -11,8 +11,7 @@ import Popup from 'ol-popup/src/ol-popup'
 import {transform} from 'ol/proj.js';
 
 
-
-function addWMSTileLayer(title, url, layers) {
+function layerSwitcherParams(title, url, layers) {
   return new TileLayer({
     title:title,
     source: new TileWMS({
@@ -29,14 +28,16 @@ function addWMSTileLayer(title, url, layers) {
 const map = new Map({
   target: 'map',
   layers: [
+
     new TileLayer({
       title:'Mapa OL',
       source: new OSM(),
     }),
 
-    addWMSTileLayer('Logradouro','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_logradouro'),
-    addWMSTileLayer('Limite','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_limite'),
-    addWMSTileLayer('Bairro','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_bairro'),
+    layerSwitcherParams('Logradouro','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_logradouro'),
+    layerSwitcherParams('Limite','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_limite'),
+    layerSwitcherParams('Bairro','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_bairro'),
+  
   ],
 
   view: new View({
@@ -47,10 +48,7 @@ const map = new Map({
 
 
 const layerswitcher = new LayerSwitcher()
-
 map.addControl(layerswitcher)
-
-
 
 
 var popup = new Popup();
