@@ -9,14 +9,15 @@ import TileWMS from 'ol/source/TileWMS.js';
 import LayerSwitcher from "ol-ext/control/LayerSwitcher";
 import Popup from 'ol-popup/src/ol-popup'
 import {transform} from 'ol/proj.js';
+import { toStringHDMS } from 'ol/coordinate';
 
 
-function layerSwitcherParams(title, url, layers) {
+function layerSwitcherParams(title, layers) {
   return new TileLayer({
     title:title,
     source: new TileWMS({
       attributions: '@geoserver',
-      url: url,
+      url: 'http://localhost:8080/geoserver/portao/wms',
       params: {
         'LAYERS': layers,
       },
@@ -34,9 +35,9 @@ const map = new Map({
       source: new OSM(),
     }),
 
-    layerSwitcherParams('Logradouro','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_logradouro'),
-    layerSwitcherParams('Limite','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_limite'),
-    layerSwitcherParams('Bairro','http://localhost:8080/geoserver/portao/wms', 'portao:portao_g_bairro'),
+    layerSwitcherParams('Logradouro', 'portao:portao_g_logradouro'),
+    layerSwitcherParams('Limite', 'portao:portao_g_limite'),
+    layerSwitcherParams('Bairro', 'portao:portao_g_bairro'),
   
   ],
 
@@ -51,10 +52,14 @@ const layerswitcher = new LayerSwitcher()
 map.addControl(layerswitcher)
 
 
-var popup = new Popup();
+var popup = new Popup({
+  
+});
 map.addOverlay(popup);
 
+
 map.on('singleclick', function(evt) {
-    var prettyCoord = ol.coordinate.toStringHDMS(ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'), 2);
-    popup.show(evt.coordinate, '<div><h2>Coordinates</h2><p>' + prettyCoord + '</p></div>');
+    const coord = toStringHDMS(transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'), 2);
+    
+    popup.show(evt.coordinate, '<div> <h2>Coordinates</h2> <p>'+ coord + '</p> </div>');
 });
